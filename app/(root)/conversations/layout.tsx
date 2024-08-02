@@ -6,7 +6,7 @@ import { useQuery } from 'convex/react'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
 import DMConversationItem from './_components/DMConversationItem'
-import CreateGroupDialog from './_components/CreateGroupDialog'
+// import CreateGroupDialog from './_components/CreateGroupDialog'
 
 type Props = React.PropsWithChildren<{}>
 
