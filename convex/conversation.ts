@@ -48,56 +48,57 @@ export const get = query({args: {
                 },
                 otherMembers:null,
             }
-        } else{
-            const otherMembers = (await Promise.all(
-                allConversationMemberships.filter(membership => membership.memberId !== currentUser._id))).map(async membership => {
-                    const member = await ctx.db.get(membership.memberId)
+        } },
+//         else{
+//             const otherMembers = (await Promise.all(
+//                 allConversationMemberships.filter(membership => membership.memberId !== currentUser._id))).map(async membership => {
+//                     const member = await ctx.db.get(membership.memberId)
 
-                    if(!member){
-                        throw new ConvexError ("Member could not be found")
-                    }
+//                     if(!member){
+//                         throw new ConvexError ("Member could not be found")
+//                     }
 
-                    return{
-                        username: member.username,
-                    }
-                })
+//                     return{
+//                         username: member.username,
+//                     }
+//                 })
 
-                return { ...conversation, otherMembers, otherMember: null}
-        }
-        },
-    });
+//                 return { ...conversation, otherMembers, otherMember: null}
+//         }
+//         },
+//     });
 
-export const createGroup = mutation({
-    args: {
-        members : v.array(v.id("users")),
-        name: v.string()
+// export const createGroup = mutation({
+//     args: {
+//         members : v.array(v.id("users")),
+//         name: v.string()
 
-    },
-    handler: async (ctx, args) =>{
-        const identity = await ctx.auth.getUserIdentity()
+//     },
+//     handler: async (ctx, args) =>{
+//         const identity = await ctx.auth.getUserIdentity()
     
-        if(!identity){
-            throw new Error("Unauthorized") 
-        }
+//         if(!identity){
+//             throw new Error("Unauthorized") 
+//         }
     
-        const currentUser = await getUserByClerkId({
-            ctx, clerkId: identity.subject
-        })
+//         const currentUser = await getUserByClerkId({
+//             ctx, clerkId: identity.subject
+//         })
     
-        if(!currentUser){
-            throw new ConvexError("User not found")
-        } 
+//         if(!currentUser){
+//             throw new ConvexError("User not found")
+//         } 
 
-        const conversationId = await ctx.db.insert("conversations", {
-            isGroup: true,
-            name: args.name
-        })
+//         const conversationId = await ctx.db.insert("conversations", {
+//             isGroup: true,
+//             name: args.name
+//         })
 
-        await Promise.all([...args.members, currentUser._id].map(async (memberId) =>{
-            await ctx.db.insert("conversationMembers", {
-                memberId,
-                conversationId,
-            });
-        }))
-    }
+//         await Promise.all([...args.members, currentUser._id].map(async (memberId) =>{
+//             await ctx.db.insert("conversationMembers", {
+//                 memberId,
+//                 conversationId,
+//             });
+//         }))
+//     }
 })
